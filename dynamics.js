@@ -7,7 +7,7 @@ function createInitialParticles(count/*, reInitForces*/){
     console.log("Initializing Particles")
     
     for (let i=0;i<window.particleCount;i++){
-        let radius = Math.random() * (3 - 1) + 1
+        let radius = Math.random() * (2 - 0.5) + 1
         let position = [7*Math.random()-5,7*Math.random()-5,7*Math.random()-5]
         let velocity = mul([Math.random()-0.5,Math.random()-0.5,Math.random()-0.5], radius)
         let color = [Math.random(), Math.random(), Math.random(),1.0]

@@ -9,11 +9,12 @@ window.temp4 = 0
 window.reset = false
 window.particles = []
 window.particleCount = 50
+window.thresholdDiff = 0
 
 // Audio related globals
 let audioCtx, analyser, dataArray;
 let beatDetected = false;
-let beatThreshold = 28; 
+let beatThreshold = 75; 
 let source;
 
 async function setupAudio() {
@@ -22,7 +23,7 @@ async function setupAudio() {
     analyser.fftSize = 2048;
     dataArray = new Uint8Array(analyser.frequencyBinCount);
 
-    const response = await fetch('data/graphics-testing.mp3'); 
+    const response = await fetch('data/uptwon-funk.mp3'); 
     const arrayBuffer = await response.arrayBuffer();
     const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
 
@@ -39,13 +40,19 @@ function updateAudioData() {
     // console.log("dataArray from frequData",dataArray)
 }
 
+
 function detectBeat() {
+
     let sum = 0;
+    thresholdDiff  = 0
     for (let i = 0; i < dataArray.length; i++) {
         sum += dataArray[i];
     }
     let average = sum / dataArray.length;
     beatDetected = (average > beatThreshold);
+    if (beatDetected){
+        thresholdDiff = average - beatThreshold
+    }
     
     // console.log("beatThreshhold", beatThreshold)
     // console.log("beatDetected", beatDetected)
@@ -53,6 +60,36 @@ function detectBeat() {
     // console.log("avg", average)
     // console.log("dataArray", dataArray)
 }
+
+
+let amplitudeHistory = [];
+let historySize = 60; // ~1 second if you're updating ~60fps
+
+// function detectBeat(dataArray) {
+//     if (!dataArray){
+//         return
+//     }
+//   let sum = 0;
+//   for (let i = 0; i < dataArray.length; i++) {
+//     sum += dataArray[i];
+//   }
+//   let currentValue = sum / dataArray.length;
+
+//   amplitudeHistory.push(currentValue);
+//   if (amplitudeHistory.length > historySize) {
+//     amplitudeHistory.shift();
+//   }
+
+//   let avg = amplitudeHistory.reduce((a,b) => a+b,0) / amplitudeHistory.length;
+//   let variance = amplitudeHistory.reduce((a,b) => a + Math.pow(b - avg, 2), 0) / amplitudeHistory.length;
+//   let std = Math.sqrt(variance);
+
+//   // Dynamic threshold: average plus a multiple of std
+//   let dynamicThreshold = avg + std * 1.5; // Tweak multiplier
+  
+//   return (currentValue > dynamicThreshold);
+// }
+
 
 // SINGLE GEOMETRY APPROACH - render spheres
 function draw(milliseconds) {
@@ -100,9 +137,17 @@ function timeStep(milliseconds) {
     createInitialForces()
 
     if (beatDetected) {
+        let angle = Math.random() * 2 * Math.PI;
+        let tilt = Math.random() * 0.5 - 0.25; // small tilt
+        let forceDirection = [
+        Math.cos(angle) * Math.cos(tilt),
+        Math.sin(tilt),
+        Math.sin(angle) * Math.cos(tilt)
+        ];
+
         for (let i = 0; i < window.particleCount; i++) {
             let thisParticle = window.particles[i];
-            thisParticle.otherForces.push([0, 5, 0]); 
+            thisParticle.otherForces.push([0, 0.2*thresholdDiff, 0], forceDirection); 
         }
     }
 
