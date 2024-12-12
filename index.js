@@ -139,10 +139,36 @@ async function setup(event) {
 
 window.addEventListener('load', setup)
 
+// document.getElementById('playAudioButton').addEventListener('click', async () => {
+//     if (audioCtx.state === 'suspended') {
+//         await audioCtx.resume();
+//     } else {
+//         source.start(0);
+//       }
+// });
+
+
+let isPlaying = false;
+
 document.getElementById('playAudioButton').addEventListener('click', async () => {
-    if (audioCtx.state === 'suspended') {
-        await audioCtx.resume();
-    } else {
+    // If audioCtx is not running yet (suspended), and we haven't started playback
+    if (!isPlaying) {
+        if (audioCtx.state === 'suspended') {
+            await audioCtx.resume(); 
+        }
+        // Start the buffer from the beginning if not started
         source.start(0);
-      }
+        isPlaying = true;
+        document.getElementById('playAudioButton').textContent = "Pause Audio";
+    } else {
+        // If currently playing, toggle pause/play by suspending/resuming the audio context
+        if (audioCtx.state === 'running') {
+            await audioCtx.suspend();
+            document.getElementById('playAudioButton').textContent = "Play Audio";
+        } else if (audioCtx.state === 'suspended') {
+            await audioCtx.resume();
+            document.getElementById('playAudioButton').textContent = "Pause Audio";
+        }
+        // Since we are toggling between suspend/resume, isPlaying remains true after first start.
+    }
 });
