@@ -3,45 +3,57 @@
 <head>
     <meta charset="utf-8">
     <title>CS 418 Particles</title>
-    
-    <!-- handles controls -->
+    <style>
+        body { margin: 0; border: none; padding: 0; display: flex; }
+        .controls {
+            width: min(50%, 20em); padding: 1em;
+            flex: 0 0 min(50%, 20em);
+        }
+        .controls label { display: block; }
+        .display {
+            flex-grow: 1; height: 100vh;
+            line-height: 0rem;
+        }
 
 
+        #playAudioButton {
+            position: absolute;
+            top: 1em;
+            left: 1em;
+            background: linear-gradient(45deg, #4A90E2, #7BDCB5);
+            border: none;
+            border-radius: 0.5em;
+            font-size: 1.2em;
+            color: #fff;
+            padding: 0.75em 1.5em;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
 
+        #playAudioButton:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
 
-<script>// Placeholder script; edit or move to separate file
-
-</script>
-
-
-
-<!-- DO NOT MODIFY anything below this line -->
-<style>
-    body { margin: 0; border: none; padding: 0; display: flex; }
-    .controls {
-        width: min(50%, 20em); padding: 1em;
-        flex: 0 0 min(50%, 20em);
-    }
-    .controls label { display: block; }
-    .display {
-        flex-grow: 1; height: 100vh;
-        line-height: 0rem;
-    }
-</style>
+        #playAudioButton:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
 </head>
 <body>
-
     <div class="display"><canvas width="500" height="500"></canvas></div>
     <button id="playAudioButton">Play Audio</button>
-<canvas></canvas>
-<!-- <script src="object/object.js"></script> -->
-<script src="index.js"></script>
-<script src="compile.js"></script>
-<script src="operations.js"></script>
 
-<script src="screen-util.js"></script>
-<script src="sphere.js"></script>
-<script src="dynamics.js"></script>
-<script src="wallsColliding.js"></script>
+    <script src="index.js"></script>
+    <script src="compile.js"></script>
+    <script src="operations.js"></script>
+    <script src="screen-util.js"></script>
+    <script src="sphere.js"></script>
+    <script src="dynamics.js"></script>
+    <script src="wallsColliding.js"></script>
 </body>
 </html>
