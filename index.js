@@ -210,6 +210,7 @@ document.getElementById('playAudioButton').addEventListener('click', async () =>
         if (audioCtx.state === 'running') {
             await audioCtx.suspend();
             document.getElementById('playAudioButton').textContent = "Play Audio";
+            window.otherForces.length = 0
         } else if (audioCtx.state === 'suspended') {
             await audioCtx.resume();
             document.getElementById('playAudioButton').textContent = "Pause Audio";
